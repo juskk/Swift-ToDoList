@@ -41,3 +41,16 @@ GoogleService-Info.plist
 
 # Misc
 *.playground/
+*.xcuserstate
+*.xcuserdatad/
+xcuserdata/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Firebase credentials
+**/GoogleService-Info.plist
+
+# macOS
+.DS_Store
