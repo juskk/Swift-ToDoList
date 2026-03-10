@@ -28,7 +28,7 @@ A simple iOS to-do list app built with **SwiftUI**, **UIKit**, and **Firebase**.
 - Input validation and error messages for both login and registration
 
 ### To-Do List
-- **View todos** — real-time list powered by Firestore
+- **View todos** — real-time list powered by a Firestore snapshot listener
 - **Add new item** — title and due date with validation
 - **Mark as done** — toggle completion status
 - **Delete** — swipe to delete
@@ -41,34 +41,66 @@ A simple iOS to-do list app built with **SwiftUI**, **UIKit**, and **Firebase**.
 ### Settings (UIKit)
 - **Appearance** — switch between System, Light, and Dark mode
 - Preference is persisted across app launches via UserDefaults
-- Built with UIKit (UITableViewController) using MVVM, bridged into SwiftUI via UIViewControllerRepresentable
+- Built with UIKit (UITableViewController), bridged into SwiftUI via UIViewControllerRepresentable
 
 ## Tech Stack
 
 - **SwiftUI** — all screens except Settings
-- **UIKit** — Settings screen (demonstrating UIKit + MVVM in a SwiftUI app)
+- **UIKit** — Settings screen (demonstrating UIKit in a SwiftUI app)
 - **Firebase Auth** — authentication
 - **Firebase Firestore** — data storage and real-time sync
-- **MVVM** — architecture pattern used throughout
+- **VIPER** — architecture pattern used throughout
+
+## Architecture
+
+The app follows the **VIPER** architecture pattern. Each feature is an independent module with five layers:
+
+| Layer | Responsibility |
+|-------|----------------|
+| **View** | Pure UI. Reads state from the Presenter, forwards user actions to it. No business logic. |
+| **Interactor** | Use cases and data access. All Firebase/Auth/UserDefaults calls live here. Reports results back to the Presenter via an Output protocol. |
+| **Presenter** | Orchestrator. Owns the observable state the View binds to. Validates input, calls the Interactor, reacts to its callbacks, and tells the Router when to navigate. |
+| **Entity** | Plain data models (`User`, `ToDoListItem`). No logic. |
+| **Router** | Assembles the module (wires Interactor → Presenter → View) and owns navigation to other modules. |
+
+### Module communication
+
+```
+View  ──calls──▶  Presenter  ──calls──▶  Interactor
+ ▲                    ▲                       │
+ │                    └───────callbacks────────┘
+ └──binds to @Published state
+```
+
+The Router is the only layer that knows about other modules. Every other layer communicates only with its direct neighbour, always via a protocol — making each layer independently testable.
+
+### Settings (UIKit VIPER)
+
+Because Settings uses `UITableViewController` instead of SwiftUI, it uses the classic UIKit VIPER delegate pattern:
+- Presenter holds a `weak var view: SettingsViewProtocol?`
+- View conforms to `SettingsViewProtocol` and calls Presenter methods for user actions
+- Presenter calls `view?.reloadData()` when state changes
 
 ## Project Structure
 
 ```
 ToDoList/
-├── Models/              Data models (User, ToDoListItem)
-├── ViewModels/
-│   ├── Auth/            Login & Register view models
-│   ├── Todo/            List, item, and new item view models
-│   ├── Profile/         Profile view model
-│   ├── Settings/        Settings view model (theme persistence)
-│   └── Main/            Main view model (auth state)
-├── Views/
-│   ├── Screens/
-│   │   ├── Auth/        Login & Register screens
-│   │   ├── Todo/        To-do list & new item screens
-│   │   ├── Profile/     Profile screen
-│   │   ├── Settings/    Settings screen (UIKit + SwiftUI bridge)
-│   │   └── Main/        Root view (auth gate + tabs)
-│   └── Components/      Reusable UI (HeaderView, TLButton, ToDoListItemView)
-└── Other/               App entry point, extensions, assets, launch screen
+├── Entities/                    Shared data models (User, ToDoListItem)
+├── Modules/
+│   ├── Main/                    Root module — auth gate + tab bar
+│   │   ├── MainInteractor.swift
+│   │   ├── MainPresenter.swift
+│   │   ├── MainRouter.swift
+│   │   └── MainView.swift
+│   ├── Auth/
+│   │   ├── Login/               Login module
+│   │   └── Register/            Register module
+│   ├── TodoList/                Todo list module (real-time Firestore listener)
+│   ├── NewItem/                 New item sheet module
+│   ├── Profile/                 Profile module
+│   └── Settings/                Settings module (UIKit + SwiftUI bridge)
+├── Shared/
+│   ├── Components/              Reusable UI (HeaderView, TLButton, ToDoListItemView)
+│   └── Extensions/              Swift extensions (Encodable+asDictionary)
+└── Other/                       App entry point, assets, launch screen
 ```
