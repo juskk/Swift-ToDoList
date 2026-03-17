@@ -85,29 +85,19 @@ A minimal `UIApplicationDelegate` that calls `RNBridge.shared.setup()` in `didFi
 
 #### `ios/ToDoList/Modules/TodoList/TodosRNViewController.swift`
 
-The UIViewController that hosts the RN view. In `viewDidLoad` it calls `RNBridge.shared.createView("TodosScreen", initialProperties: ["userId": userId])` and pins the returned `UIView` to all four edges with Auto Layout constraints.
+A pure SwiftUI file (the filename is legacy; it can be renamed `TodosRNView.swift`). Contains two types:
 
-It also registers an `NSNotificationCenter` observer for `"TodosOpenNewItem"`. When that notification fires (posted by the ObjC native module), it presents `NewItemRouter.createModule()` wrapped in a `UIHostingController` as a `.pageSheet`.
+**`TodosRNView`** — the public SwiftUI `View` used directly by the VIPER router. Owns `@State var showNewItem` and attaches a `.sheet(isPresented:)` modifier for the NewItem screen. Conditionally shows `RNViewBridge` when the factory is ready, or a text fallback otherwise.
 
-The file also contains `TodosRNView`, a `UIViewControllerRepresentable` wrapper so the VIPER router can instantiate and return the VC as a SwiftUI view.
+**`RNViewBridge`** — a private `UIViewRepresentable` that is the single UIKit seam in the file. Its `makeUIView` calls `RNBridge.shared.createView` and returns the `UIView`. The `Coordinator` class owns the `NSNotificationCenter` observer: when `"TodosOpenNewItem"` fires it calls `onOpenNewItem()`, a closure passed in from `TodosRNView` that flips `showNewItem = true`. `dismantleUIView` removes the observer when the view is torn down.
+
+There is no `UIViewController` subclass, no `UIHostingController`, no `UILabel`, and no `NSLayoutConstraint` — all of that is now handled by SwiftUI.
 
 #### `ios/ToDoList/Modules/TodoList/TodosNativeModule.m`
 
 An ObjC file that exports a native module to React Native using `RCT_EXPORT_MODULE()`. The single exported method `openNewItem` dispatches back to the main queue and posts the `"TodosOpenNewItem"` notification. The module name in JS is `NativeModules.TodosNativeModule` — it matches the class name because `RCT_EXPORT_MODULE()` with no arguments uses the class name directly.
 
 This pattern works in both old and new architecture via the interop layer — no TurboModule spec file is needed for simple methods.
-
----
-
-### Firebase config and secrets
-
-The Firebase JS SDK is initialised in `src/config/firebase.ts`. Rather than hardcoding the API key, values are loaded from a `.env` file at Metro bundle time using `react-native-dotenv` (a Babel plugin):
-
-```
-.env  →  babel-plugin (react-native-dotenv)  →  @env  →  firebase.ts
-```
-
-The `.env` file is in `.gitignore`. Anyone cloning the repo copies `.env.example` to `.env` and fills in their Firebase project values. TypeScript declarations for the `@env` module live in `src/env.d.ts`.
 
 ---
 
@@ -123,7 +113,7 @@ The `.env` file is in `.gitignore`. Anyone cloning the repo copies `.env.example
 3. Firebase Auth resolves → user signed in → TabView appears
 
 4. Home tab → TodoListRouter.createModule(userId:) → TodosRNView(userId:)
-   └── TodosRNViewController.viewDidLoad
+   └── TodosRNView.body → RNViewBridge.makeUIView
          └── RNBridge.shared.createView("TodosScreen", ["userId": userId])
                └── RN renders <TodosScreen userId="..."> component
                      └── onSnapshot listener subscribes to Firestore
@@ -138,7 +128,7 @@ The `.env` file is in `.gitignore`. Anyone cloning the repo copies `.env.example
 | File | What it does |
 |---|---|
 | `TodoListRouter.swift` | VIPER router. Creates `TodosRNView(userId:)` and returns it as a SwiftUI view. The only entry point called by the Main module. |
-| `TodosRNViewController.swift` | Hosts the RN UIView. Handles the `"TodosOpenNewItem"` notification to present the NewItem sheet. Also contains the `UIViewControllerRepresentable` wrapper. |
+| `TodosRNViewController.swift` | Pure SwiftUI file (rename to `TodosRNView.swift` if desired). `TodosRNView` is the public SwiftUI entry point: owns the `showNewItem` state and the `.sheet()` modifier. `RNViewBridge` is a private `UIViewRepresentable` that wraps the RN `UIView` and manages the `NSNotificationCenter` observer via a `Coordinator`. |
 | `TodosNativeModule.m` | ObjC native module. Exposes `openNewItem()` to JS. Posts `NSNotificationCenter` event on the main queue. |
 | `_Deprecated/` | Old Swift VIPER files (`TodoListView.swift`, `TodoListInteractor.swift`, `TodoListPresenter.swift`) superseded by the RN screen. Kept for reference, not compiled into the app in a meaningful way. |
 
@@ -427,59 +417,101 @@ struct YourApp: App {
 
 ---
 
-### Step 8 — Create the hosting `UIViewController`
+### Step 8 — Create the SwiftUI host view
 
-Create `ios/YourApp/TodosRNViewController.swift`:
+Create `ios/YourApp/TodosRNView.swift`:
 
 ```swift
-import UIKit
 import SwiftUI
 
-final class TodosRNViewController: UIViewController {
-    private let userId: String
+// ─── Public SwiftUI view ────────────────────────────────────────────────────
 
-    init(userId: String) {
-        self.userId = userId
-        super.init(nibName: nil, bundle: nil)
+struct TodosRNView: View {
+    let userId: String
+    @State private var showNewItem = false
+
+    var body: some View {
+        Group {
+            if RNBridge.shared.isReady {
+                RNViewBridge(userId: userId, onOpenNewItem: { showNewItem = true })
+                    .ignoresSafeArea()
+            } else {
+                Text("React Native not initialised.\nRun pod install and rebuild.")
+                    .foregroundStyle(.secondary)
+                    .font(.system(size: 15))
+                    .multilineTextAlignment(.center)
+                    .padding(24)
+            }
+        }
+        .sheet(isPresented: $showNewItem) {
+            NewItemRouter.createModule()
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+        }
     }
+}
 
-    required init?(coder: NSCoder) { fatalError() }
+// ─── Private UIViewRepresentable bridge ────────────────────────────────────
+//
+// The only UIKit seam: wraps the UIView returned by RN's root view factory.
+// Coordinator owns the NSNotificationCenter observer lifetime.
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        guard RNBridge.shared.isReady else { return }
+private struct RNViewBridge: UIViewRepresentable {
+    let userId: String
+    let onOpenNewItem: () -> Void
 
-        let rnView = RNBridge.shared.createView(
+    func makeCoordinator() -> Coordinator { Coordinator() }
+
+    func makeUIView(context: Context) -> UIView {
+        context.coordinator.onOpenNewItem = onOpenNewItem
+        context.coordinator.startObserving()
+        return RNBridge.shared.createView(
             moduleName: "TodosScreen",
             initialProperties: ["userId": userId]
         )
-        rnView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(rnView)
-        NSLayoutConstraint.activate([
-            rnView.topAnchor.constraint(equalTo: view.topAnchor),
-            rnView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            rnView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            rnView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
     }
-}
 
-// SwiftUI wrapper — use this anywhere in your SwiftUI view hierarchy
-struct TodosRNView: UIViewControllerRepresentable {
-    let userId: String
-
-    func makeUIViewController(context: Context) -> TodosRNViewController {
-        TodosRNViewController(userId: userId)
+    func updateUIView(_ uiView: UIView, context: Context) {
+        context.coordinator.onOpenNewItem = onOpenNewItem
     }
-    func updateUIViewController(_ vc: TodosRNViewController, context: Context) {}
+
+    static func dismantleUIView(_ uiView: UIView, coordinator: Coordinator) {
+        coordinator.stopObserving()
+    }
+
+    final class Coordinator {
+        var onOpenNewItem: (() -> Void)?
+        private var observer: NSObjectProtocol?
+
+        func startObserving() {
+            observer = NotificationCenter.default.addObserver(
+                forName: NSNotification.Name("TodosOpenNewItem"),
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in self?.onOpenNewItem?() }
+        }
+
+        func stopObserving() {
+            if let observer {
+                NotificationCenter.default.removeObserver(observer)
+                self.observer = nil
+            }
+        }
+
+        deinit { stopObserving() }
+    }
 }
 ```
 
-Use it in SwiftUI:
+Use it anywhere in SwiftUI — no `UIViewController`, no `UIHostingController` needed:
 
 ```swift
 TodosRNView(userId: currentUser.id)
 ```
+
+> **Why `UIViewRepresentable` instead of `UIViewControllerRepresentable`:** The `UIViewController` layer was only needed to call `present(_:animated:)` for the sheet and to manage `addSubview`. Both are now handled by SwiftUI (`.sheet()` modifier and `makeUIView` respectively), so the VC is unnecessary. `UIViewRepresentable` is a lighter, more direct bridge.
+>
+> **Why `.ignoresSafeArea()`:** The RN root view manages its own safe area insets internally. Without this modifier SwiftUI would clip the RN view inside the safe area, which can cause layout issues with the RN navigation bars and bottom content.
 
 ---
 
@@ -535,69 +567,6 @@ NativeModules.YourNativeModule.openNewItem();
 ```
 
 > `RCT_EXPORT_MODULE()` with no arguments uses the ObjC class name as the JS module name. Make sure they match.
-
----
-
-### Step 10 — Keep Firebase config out of source control
-
-If your RN screen uses Firebase (or any secret), use `react-native-dotenv` instead of hardcoding values:
-
-```bash
-npm install --save-dev react-native-dotenv
-```
-
-Update `babel.config.js`:
-
-```js
-module.exports = {
-  presets: ['module:@react-native/babel-preset'],
-  plugins: [
-    ['module:react-native-dotenv', {
-      moduleName: '@env',
-      path: '.env',
-      safe: true,
-      allowUndefined: false,
-    }],
-  ],
-};
-```
-
-Create `.env` (gitignored) and `.env.example` (committed):
-
-```
-FIREBASE_API_KEY=your-key-here
-FIREBASE_PROJECT_ID=your-project-id
-```
-
-Create `src/env.d.ts` for TypeScript:
-
-```ts
-declare module '@env' {
-  export const FIREBASE_API_KEY: string;
-  export const FIREBASE_PROJECT_ID: string;
-}
-```
-
-Use in your config:
-
-```ts
-import { FIREBASE_API_KEY, FIREBASE_PROJECT_ID } from '@env';
-```
-
----
-
-### Step 11 — Build and run
-
-Start Metro bundler from the repo root:
-
-```bash
-npx react-native start
-```
-
-Open `ios/YourApp.xcworkspace` in Xcode (not `.xcodeproj`), then:
-
-1. Clean the build folder: **Cmd+Shift+K**
-2. Build and run: **Cmd+R**
 
 ---
 

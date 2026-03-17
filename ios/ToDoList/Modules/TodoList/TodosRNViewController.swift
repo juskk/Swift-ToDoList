@@ -1,99 +1,98 @@
 //
-//  TodosRNViewController.swift
+//  TodosRNViewController.swift  (can be renamed TodosRNView.swift)
 //  ToDoList
 //
 //  VIPER – View (React Native host)
-//  Wraps a React Native root view in a UIViewController.
-//  Also listens for the "TodosOpenNewItem" notification posted by
-//  TodosNativeModule.m when the RN FAB is tapped, and presents the
-//  Swift NewItem sheet in response.
+//  Pure SwiftUI view that hosts the React Native Todos screen.
+//
+//  UIViewRepresentable is the only UIKit seam: RN's factory always returns
+//  a UIView, so a thin bridge is unavoidable. Everything else — the sheet,
+//  fallback state, and notification lifecycle — is handled by SwiftUI.
 //
 
-import UIKit
 import SwiftUI
 
-final class TodosRNViewController: UIViewController {
+// ─── Public SwiftUI view (entry point used by TodoListRouter) ──────────────
 
-    private let userId: String
+struct TodosRNView: View {
+    let userId: String
 
-    init(userId: String) {
-        self.userId = userId
-        super.init(nibName: nil, bundle: nil)
-    }
+    @State private var showNewItem = false
 
-    required init?(coder: NSCoder) { fatalError("Use init(userId:)") }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // ── 1. Factory guard ────────────────────────────────────────────────
-        guard RNBridge.shared.isReady else {
-            showFallback("React Native factory not initialised.\nRun pod install and rebuild.")
-            return
+    var body: some View {
+        Group {
+            if RNBridge.shared.isReady {
+                RNViewBridge(userId: userId, onOpenNewItem: { showNewItem = true })
+                    .ignoresSafeArea()
+            } else {
+                Text("React Native not initialised.\nRun pod install and rebuild.")
+                    .foregroundStyle(.secondary)
+                    .font(.system(size: 15))
+                    .multilineTextAlignment(.center)
+                    .padding(24)
+            }
         }
-
-        // ── 2. Create the RN root view ──────────────────────────────────────
-        let rnView = RNBridge.shared.createView(
-            moduleName: "TodosScreen",
-            initialProperties: ["userId": userId]
-        )
-        rnView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(rnView)
-        NSLayoutConstraint.activate([
-            rnView.topAnchor.constraint(equalTo: view.topAnchor),
-            rnView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            rnView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            rnView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
-
-        // ── 3. Listen for "open new item" from the RN FAB ───────────────────
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(presentNewItem),
-            name: NSNotification.Name("TodosOpenNewItem"),
-            object: nil
-        )
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
-    @objc private func presentNewItem() {
-        let newItemView = NewItemRouter.createModule()
-        let hostingVC = UIHostingController(rootView: newItemView)
-        hostingVC.modalPresentationStyle = .pageSheet
-        if let sheet = hostingVC.sheetPresentationController {
-            sheet.detents = [.large()]
-            sheet.prefersGrabberVisible = true
+        .sheet(isPresented: $showNewItem) {
+            NewItemRouter.createModule()
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
         }
-        present(hostingVC, animated: true)
-    }
-
-    private func showFallback(_ message: String) {
-        let label = UILabel()
-        label.text = message
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        label.textColor = .secondaryLabel
-        label.font = .systemFont(ofSize: 15)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(label)
-        NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-        ])
     }
 }
 
-struct TodosRNView: UIViewControllerRepresentable {
-    let userId: String
+// ─── Private UIViewRepresentable bridge ────────────────────────────────────
+//
+// Sole UIKit seam: wraps the UIView returned by RN's root view factory.
+// The Coordinator owns the NSNotificationCenter observer lifetime so the
+// subscription is cleaned up automatically when the view is dismantled.
 
-    func makeUIViewController(context: Context) -> TodosRNViewController {
-        TodosRNViewController(userId: userId)
+private struct RNViewBridge: UIViewRepresentable {
+    let userId: String
+    let onOpenNewItem: () -> Void
+
+    func makeCoordinator() -> Coordinator { Coordinator() }
+
+    func makeUIView(context: Context) -> UIView {
+        context.coordinator.onOpenNewItem = onOpenNewItem
+        context.coordinator.startObserving()
+        return RNBridge.shared.createView(
+            moduleName: "TodosScreen",
+            initialProperties: ["userId": userId]
+        )
     }
 
-    func updateUIViewController(_ uiViewController: TodosRNViewController, context: Context) {}
+    // Keep the closure current across SwiftUI re-renders.
+    func updateUIView(_ uiView: UIView, context: Context) {
+        context.coordinator.onOpenNewItem = onOpenNewItem
+    }
+
+    static func dismantleUIView(_ uiView: UIView, coordinator: Coordinator) {
+        coordinator.stopObserving()
+    }
+
+    // ── Coordinator ─────────────────────────────────────────────────────────
+
+    final class Coordinator {
+        var onOpenNewItem: (() -> Void)?
+        private var observer: NSObjectProtocol?
+
+        func startObserving() {
+            observer = NotificationCenter.default.addObserver(
+                forName: NSNotification.Name("TodosOpenNewItem"),
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                self?.onOpenNewItem?()
+            }
+        }
+
+        func stopObserving() {
+            if let observer {
+                NotificationCenter.default.removeObserver(observer)
+                self.observer = nil
+            }
+        }
+
+        deinit { stopObserving() }
+    }
 }
