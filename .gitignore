@@ -52,5 +52,10 @@ xcuserdata/
 # Firebase credentials
 **/GoogleService-Info.plist
 
+# Environment variables (contain secrets — use .env.example as template)
+.env
+
 # macOS
 .DS_Store
+
+**/node_modules

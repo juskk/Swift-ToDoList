@@ -8,6 +8,8 @@ import SwiftUI
 
 @main
 struct ToDoListApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     init() {
         FirebaseApp.configure()
     }

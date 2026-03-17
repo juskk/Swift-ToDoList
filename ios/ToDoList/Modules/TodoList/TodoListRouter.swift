@@ -10,10 +10,10 @@
 import SwiftUI
 
 enum TodoListRouter {
-    static func createModule(userId: String) -> TodoListView {
-        let interactor = TodoListInteractor()
-        let presenter = TodoListPresenter(interactor: interactor, userId: userId)
-        return TodoListView(presenter: presenter)
+    /// Returns the React Native host as the TodoList View layer.
+    /// RN owns list UI and data; Swift passes only the userId.
+    static func createModule(userId: String) -> some View {
+        TodosRNView(userId: userId)
     }
 
     static func makeNewItemView() -> NewItemView {

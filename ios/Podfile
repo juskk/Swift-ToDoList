@@ -1,0 +1,70 @@
+# Keep the legacy architecture APIs (RCTBridge / RCTRootView) in the binary.
+#
+# In RN 0.84, new_arch_enabled is hardcoded to `true` in new_architecture.rb,
+# so ENV['RCT_NEW_ARCH_ENABLED'] = '0' has NO effect — New Architecture is
+# always on.  What DOES work is RCT_REMOVE_LEGACY_ARCH: when it's '1' (the
+# default), react_native_pods.rb injects -DRCT_REMOVE_LEGACY_ARCH=1 into
+# OTHER_CFLAGS, which strips out RCTBridge / RCTRootView entirely at compile
+# time.  Setting it to '0' keeps both architectures in the binary so our
+# RCTBridge-based embedding still works alongside New Architecture.
+ENV['RCT_REMOVE_LEGACY_ARCH'] = '0'
+
+# Resolve react_native_pods.rb from node_modules at the repo root (one level up).
+require Pod::Executable.execute_command('node', ['-p',
+  'require.resolve(
+    "react-native/scripts/react_native_pods.rb",
+    {paths: [process.argv[1]]},
+  )', __dir__]).strip
+
+platform :ios, min_ios_version_supported
+prepare_react_native_project!
+
+target 'ToDoList' do
+  # Point directly at node_modules — avoids needing @react-native-community/cli
+  # for autolinking. Add native module packages later when needed.
+  rn_path = '../node_modules/react-native'
+
+  use_react_native!(
+    :path => rn_path,
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
+
+  post_install do |installer|
+    react_native_post_install(
+      installer,
+      rn_path,
+      :mac_catalyst_enabled => false
+    )
+
+    # Xcode 14+ enables User Script Sandboxing by default, which blocks rsync
+    # from copying prebuilt React Native XCFrameworks into the app bundle.
+    # Must be disabled on both the Pods project AND the main app project.
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
+      end
+    end
+
+    installer.aggregate_targets.each do |aggregate_target|
+      user_project = aggregate_target.user_project
+      pods_path = File.expand_path(installer.pods_project.path)
+
+      # Add Pods project reference so we can add target dependency (fixes build order)
+      unless user_project.reference_for_path(pods_path)
+        pods_group = user_project.main_group['Pods'] || user_project.main_group.new_group('Pods', 'Pods')
+        pods_group.new_reference(pods_path, :group)
+      end
+
+      user_project.native_targets.each do |target|
+        target.build_configurations.each do |config|
+          config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
+        end
+        pods_target = installer.pods_project.targets.find { |t| t.name == aggregate_target.name }
+        if pods_target && !target.dependencies.any? { |d| d.display_name == aggregate_target.name }
+          target.add_dependency(pods_target)
+        end
+      end
+      aggregate_target.user_project.save
+    end
+  end
+end

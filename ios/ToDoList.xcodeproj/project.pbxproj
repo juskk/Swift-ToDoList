@@ -3,22 +3,90 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B78F0989F9348906BB5C79A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A36EF3A8D0FA38B2259ED3E7 /* PrivacyInfo.xcprivacy */; };
+		9D517C599AC903690F5267D7 /* libPods-ToDoList.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F28A78ABCA6EC3EF99A7CFD /* libPods-ToDoList.a */; };
 		CEBF71432F4A2755005FCDF7 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = CEBF71422F4A2755005FCDF7 /* FirebaseCore */; };
 		CEBF718A2F4A6ABA005FCDF7 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = CEBF71892F4A6ABA005FCDF7 /* FirebaseAuth */; };
 		CEBF71BD2F4B8161005FCDF7 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CEBF71BC2F4B8161005FCDF7 /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		17A2340B331EAB4FAF506CAF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E35582B8A20930C365AFD2D /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0CEF74A24ECE8AEEF7B1E27B305D2DDC;
+			remoteInfo = Subproject;
+		};
+		23AC7CD7A628031097144636 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E35582B8A20930C365AFD2D /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2E1F79B59673DDADE4D69889E86F0EF6;
+			remoteInfo = Subproject;
+		};
+		3D45059DE3E492FC5677D5C4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E35582B8A20930C365AFD2D /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BB214EC5C784D0D6F134C8412AE88BD7;
+			remoteInfo = Subproject;
+		};
+		45061C111C245AA5BCF06EA1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E35582B8A20930C365AFD2D /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AE0A1EA659F2DEAADCB4793590A22965;
+			remoteInfo = Subproject;
+		};
+		A361B9DF77F66D34DC221758 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E35582B8A20930C365AFD2D /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 79BA67467E7C8C63F8AD7E8FA1098BB9;
+			remoteInfo = Subproject;
+		};
+		C5474FF5139836AA9966E3EE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E35582B8A20930C365AFD2D /* Pods.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = F66B8EC4FCB4671A397675B3D6265CA5;
+			remoteInfo = "Pods-ToDoList";
+		};
+		CC9C8828A21F752A0B1AB075 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E35582B8A20930C365AFD2D /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C07C429E887D0FBD7D457208EF1B14CD;
+			remoteInfo = Subproject;
+		};
+		F13418F6BEB21115BF896779 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E35582B8A20930C365AFD2D /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E29ADDC93B6DED49A5C18F17348381B1;
+			remoteInfo = Subproject;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		1E35582B8A20930C365AFD2D /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Pods.xcodeproj; sourceTree = "<group>"; };
+		524C5C709BD44AC8F075AA66 /* Pods-ToDoList.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList.release.xcconfig"; path = "Target Support Files/Pods-ToDoList/Pods-ToDoList.release.xcconfig"; sourceTree = "<group>"; };
+		5F28A78ABCA6EC3EF99A7CFD /* libPods-ToDoList.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ToDoList.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A36EF3A8D0FA38B2259ED3E7 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		CE9ECC66CCA5C4EAC3937AB5 /* Pods-ToDoList.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList.debug.xcconfig"; path = "Target Support Files/Pods-ToDoList/Pods-ToDoList.debug.xcconfig"; sourceTree = "<group>"; };
 		CEBF712E2F4A2398005FCDF7 /* ToDoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CEBF71302F4A2398005FCDF7 /* ToDoList */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = ToDoList;
 			sourceTree = "<group>";
 		};
@@ -32,17 +100,29 @@
 				CEBF71432F4A2755005FCDF7 /* FirebaseCore in Frameworks */,
 				CEBF718A2F4A6ABA005FCDF7 /* FirebaseAuth in Frameworks */,
 				CEBF71BD2F4B8161005FCDF7 /* FirebaseFirestore in Frameworks */,
+				9D517C599AC903690F5267D7 /* libPods-ToDoList.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0E4B8A0AA6286A100F5AFF77 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5F28A78ABCA6EC3EF99A7CFD /* libPods-ToDoList.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		CEBF71252F4A2398005FCDF7 = {
 			isa = PBXGroup;
 			children = (
 				CEBF71302F4A2398005FCDF7 /* ToDoList */,
 				CEBF712F2F4A2398005FCDF7 /* Products */,
+				A36EF3A8D0FA38B2259ED3E7 /* PrivacyInfo.xcprivacy */,
+				E573A091E585618502FF9DE1 /* Pods */,
+				0E4B8A0AA6286A100F5AFF77 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -50,8 +130,26 @@
 			isa = PBXGroup;
 			children = (
 				CEBF712E2F4A2398005FCDF7 /* ToDoList.app */,
+				44AA47F0DA5E2B5559A81C97 /* libRCTSwiftUI.a */,
+				D5CC962F55395A5A3087D191 /* libRCTSwiftUIWrapper.a */,
+				EB0BAF0696FB136A1B63A6A7 /* React-Core_privacy.bundle */,
+				08A9F0CEC5D1AA9E6C9275AE /* React-cxxreact_privacy.bundle */,
+				76A9F324964C132F82D3AB7B /* libReactAppDependencyProvider.a */,
+				B4D1114A303454833488BA75 /* libReactCodegen.a */,
+				9A42EC13E53687D47E53A78A /* libPods-ToDoList.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E573A091E585618502FF9DE1 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CE9ECC66CCA5C4EAC3937AB5 /* Pods-ToDoList.debug.xcconfig */,
+				524C5C709BD44AC8F075AA66 /* Pods-ToDoList.release.xcconfig */,
+				1E35582B8A20930C365AFD2D /* Pods.xcodeproj */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -61,13 +159,17 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CEBF713C2F4A239A005FCDF7 /* Build configuration list for PBXNativeTarget "ToDoList" */;
 			buildPhases = (
+				1A8403D018003468AFA07611 /* [CP] Check Pods Manifest.lock */,
 				CEBF712A2F4A2398005FCDF7 /* Sources */,
 				CEBF712B2F4A2398005FCDF7 /* Frameworks */,
 				CEBF712C2F4A2398005FCDF7 /* Resources */,
+				4E3360CAC54D40E71011D0F4 /* [CP] Embed Pods Frameworks */,
+				FD7CCC7C9B1AB349EDA32FB6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				3CD5193B384466F664182598 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				CEBF71302F4A2398005FCDF7 /* ToDoList */,
@@ -109,9 +211,14 @@
 			packageReferences = (
 				CEBF713F2F4A2463005FCDF7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
-			preferredProjectObjectVersion = 77;
 			productRefGroup = CEBF712F2F4A2398005FCDF7 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = CEBF712F2F4A2398005FCDF7 /* Products */;
+					ProjectRef = 1E35582B8A20930C365AFD2D /* Pods.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				CEBF712D2F4A2398005FCDF7 /* ToDoList */,
@@ -119,15 +226,127 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXReferenceProxy section */
+		08A9F0CEC5D1AA9E6C9275AE /* React-cxxreact_privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = "wrapper.plug-in";
+			path = "React-cxxreact_privacy.bundle";
+			remoteRef = F13418F6BEB21115BF896779 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		44AA47F0DA5E2B5559A81C97 /* libRCTSwiftUI.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTSwiftUI.a;
+			remoteRef = 23AC7CD7A628031097144636 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		76A9F324964C132F82D3AB7B /* libReactAppDependencyProvider.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libReactAppDependencyProvider.a;
+			remoteRef = CC9C8828A21F752A0B1AB075 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		9A42EC13E53687D47E53A78A /* libPods-ToDoList.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libPods-ToDoList.a";
+			remoteRef = 45061C111C245AA5BCF06EA1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B4D1114A303454833488BA75 /* libReactCodegen.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libReactCodegen.a;
+			remoteRef = 17A2340B331EAB4FAF506CAF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D5CC962F55395A5A3087D191 /* libRCTSwiftUIWrapper.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTSwiftUIWrapper.a;
+			remoteRef = A361B9DF77F66D34DC221758 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EB0BAF0696FB136A1B63A6A7 /* React-Core_privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = "wrapper.plug-in";
+			path = "React-Core_privacy.bundle";
+			remoteRef = 3D45059DE3E492FC5677D5C4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
 /* Begin PBXResourcesBuildPhase section */
 		CEBF712C2F4A2398005FCDF7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B78F0989F9348906BB5C79A /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1A8403D018003468AFA07611 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ToDoList-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4E3360CAC54D40E71011D0F4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ToDoList/Pods-ToDoList-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ToDoList/Pods-ToDoList-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ToDoList/Pods-ToDoList-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FD7CCC7C9B1AB349EDA32FB6 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ToDoList/Pods-ToDoList-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ToDoList/Pods-ToDoList-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ToDoList/Pods-ToDoList-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		CEBF712A2F4A2398005FCDF7 /* Sources */ = {
@@ -139,6 +358,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		3CD5193B384466F664182598 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-ToDoList";
+			targetProxy = C5474FF5139836AA9966E3EE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
 		CEBF713A2F4A239A005FCDF7 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -147,7 +374,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -192,14 +419,32 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_ROOT}/ReactCommon",
+					"${PODS_ROOT}/ReactCommon/react/nativemodule/core",
+					"${PODS_ROOT}/React-runtimeexecutor",
+					"${PODS_ROOT}/React-runtimeexecutor/platform/ios",
+					"${PODS_ROOT}/ReactCommon-Samples",
+					"${PODS_ROOT}/ReactCommon-Samples/platform/ios",
+					"${PODS_ROOT}/React-Fabric/react/renderer/components/view/platform/cxx",
+					"${PODS_ROOT}/React-NativeModulesApple",
+					"${PODS_ROOT}/React-graphics",
+					"${PODS_ROOT}/React-graphics/react/renderer/graphics/platform/ios",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_CPLUSPLUSFLAGS = "$(inherited)";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				USE_HERMES = true;
 			};
 			name = Debug;
 		};
@@ -210,7 +455,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -249,18 +494,37 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_ROOT}/ReactCommon",
+					"${PODS_ROOT}/ReactCommon/react/nativemodule/core",
+					"${PODS_ROOT}/React-runtimeexecutor",
+					"${PODS_ROOT}/React-runtimeexecutor/platform/ios",
+					"${PODS_ROOT}/ReactCommon-Samples",
+					"${PODS_ROOT}/ReactCommon-Samples/platform/ios",
+					"${PODS_ROOT}/React-Fabric/react/renderer/components/view/platform/cxx",
+					"${PODS_ROOT}/React-NativeModulesApple",
+					"${PODS_ROOT}/React-graphics",
+					"${PODS_ROOT}/React-graphics/react/renderer/graphics/platform/ios",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_CPLUSPLUSFLAGS = "$(inherited)";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
+				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
 		CEBF713D2F4A239A005FCDF7 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CE9ECC66CCA5C4EAC3937AB5 /* Pods-ToDoList.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -269,6 +533,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ToDoList/Preview Content\"";
 				DEVELOPMENT_TEAM = H6BN33235A;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "ToDo List";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -290,6 +555,7 @@
 		};
 		CEBF713E2F4A239A005FCDF7 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 524C5C709BD44AC8F075AA66 /* Pods-ToDoList.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -298,6 +564,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ToDoList/Preview Content\"";
 				DEVELOPMENT_TEAM = H6BN33235A;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "ToDo List";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

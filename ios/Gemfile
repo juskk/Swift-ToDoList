@@ -1,0 +1,5 @@
+source 'https://rubygems.org'
+
+# Use a CocoaPods version that supports PBXFileSystemSynchronizedRootGroup (Xcode 16)
+gem 'cocoapods', '~> 1.15.2'
+gem 'xcodeproj', '>= 1.25.0'
